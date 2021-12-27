@@ -1,0 +1,192 @@
+@use "sass:math";
+
+.button-group {
+	@extend .inline-flex;
+	@extend .flex-nowrap;
+	@extend .flex-align-items-stretch;
+
+	border-radius: var(--border-radius-medium);
+	background-color: var(--button-group-background-color, var(--background-norm));
+	vertical-align: middle;
+
+	/*
+	 * Solid variant
+	 */
+
+	&[class*='button-group-solid'] &-item {
+		padding-inline: em(12);
+	}
+
+	&-small[class*='button-group-solid'] &-item {
+		padding-inline: em(7);
+	}
+
+	&-large[class*='button-group-solid'] &-item {
+		padding-inline: em(17);
+	}
+
+	/*
+	 * Ghost variant
+	 */
+
+	&[class*='button-group-ghost'] .vr {
+		margin-block: em(6);
+		margin-inline: em(3);
+	}
+
+	&-small[class*='button-group-ghost'] .vr {
+		margin-block: em(4);
+		margin-inline: em(3);
+	}
+
+	&-large[class*='button-group-ghost'] .vr {
+		margin-block: em(8);
+		margin-inline: em(3);
+	}
+
+	&[class*='button-group-ghost'] &-item {
+		padding-inline: em(10);
+	}
+
+	&-small[class*='button-group-ghost'] &-item {
+		padding-inline: em(5);
+	}
+
+	&-large[class*='button-group-ghost'] &-item {
+		padding-inline: em(15);
+	}
+
+	/*
+	 * Outline variant
+	 */
+
+	&[class*='button-group-outline'] {
+		padding: em(3);
+		border: 1px solid var(--button-group-border-color, transparent);
+
+		.vr {
+			margin-block: em(2);
+			margin-inline: em(3);
+		}
+	}
+
+	&[class*='button-group-outline'] &-item {
+		padding-block: em(3);
+		padding-inline: em(8);
+		border-radius: var(--border-radius-small);
+
+		&.button-for-icon {
+			padding-block: em(5.5);
+		  padding-inline: em(6);
+		}
+	}
+
+	&-small[class*='button-group-outline'] {
+		padding: em(2);
+
+		.vr {
+			margin: em(2);
+		}
+	}
+
+	&-small[class*='button-group-outline'] &-item {
+		padding-block: em(1);
+		padding-inline: em(4);
+		line-height: $base-line-height * 0.8;
+
+		&.button-for-icon {
+			padding: em(2);
+		}
+	}
+
+	&-large[class*='button-group-outline'] {
+		padding: em(4);
+
+		.vr {
+			margin-block: em(2);
+			margin-inline: em(4);
+		}
+	}
+
+	&-large[class*='button-group-outline'] &-item {
+		padding-block: em(4.5);
+		padding-inline: em(12);
+
+		&.button-for-icon {
+			padding: em(7);
+		}
+	}
+}
+
+/*
+ * Button group color variants
+ */
+
+@each $color in (norm, weak, danger, warning, success, info) {
+	// Initialize namespace
+	$group: 'signal-';
+	@if $color == 'norm' or $color == 'weak' {
+		$group: 'interaction-';
+	}
+
+	.button-group-solid-#{$color} {
+		--button-group-background-color: var(--#{$group + $color});
+		--border-norm: var(--#{$group + $color}-hover); // For vertical rule
+
+		.button-group-item {
+			--button-default-background-color: transparent;
+			--button-default-text-color: var(--#{$group + $color}-contrast);
+
+			@each $state in (hover, active) {
+				--button-#{$state}-background-color: var(--#{$group + $color}-#{$state});
+
+				@if $color == 'weak' {
+					--border-norm: var(--text-norm); // For vertical rule
+				} @else {
+					--button-#{$state}-text-color: var(--#{$group + $color}-contrast); // For vertical rule
+				}
+			}
+
+			&.is-selected {
+				background-color: var(--#{$group + $color}-active);
+			}
+		}
+	}
+
+	.button-group-outline-#{$color} {
+		--button-group-border-color: var(--#{$group + $color});
+	}
+
+	.button-group-outline-#{$color},
+	.button-group-ghost-#{$color} {
+		--border-norm: var(--#{$group + $color}); // For vertical rule
+
+		.button-group-item {
+			--button-default-background-color: transparent;
+
+			@if $color == 'weak' {
+				--button-default-text-color: var(--text-norm);
+			} @else {
+				--button-default-text-color: var(--#{$group + $color});
+			}
+
+			@each $state in (hover, active) {
+				@if $color == 'weak' {
+					--button-#{$state}-text-color: var(--text-norm);
+				} @else {
+					--button-#{$state}-text-color: var(--#{$group + $color}-#{$state});
+				}
+			}
+
+			&.is-selected {
+				@if $color == 'weak' {
+					background-color: var(--interaction-norm);
+					color: var(--interaction-norm-contrast);
+				} @else {
+					background-color: var(--#{$group + $color});
+					color: var(--#{$group + $color}-contrast);
+				}
+			}
+		}
+	}
+}

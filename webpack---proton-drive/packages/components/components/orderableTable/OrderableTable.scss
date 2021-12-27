@@ -1,0 +1,30 @@
+
+$path-images: "~@proton/styles/assets/img/shared/";
+
+
+@import '~@proton/styles/scss/config';
+
+.orderableHelper {
+	z-index: 666;
+	display: flex;
+	align-items: center;
+	color: var(--text-norm);
+	background: var(--background-norm);
+	border: solid var(--border-norm);
+	border-block-width: 1px;
+	border-inline-width: 0;
+
+	/**
+     * We replace td with custom class here because we don't have direct access to it.
+     * See: https://github.com/ProtonMail/@proton/components/pull/113/files#r305374317
+     */
+	td {
+		flex: 1;
+		border: none;
+		block-size: 100%;
+		&:first-child {
+			flex-grow: 0;
+			flex-basis: rem(35);
+		}
+	}
+}

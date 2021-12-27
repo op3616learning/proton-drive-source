@@ -1,0 +1,106 @@
+.checkbox {
+	&-container {
+		// position: relative; exported inside the component to enable increase-surface-click
+		display: inline-flex;
+	}
+
+	&-input {
+		&#{&} {
+			// Specificity fail for width
+			position: absolute;
+			cursor: pointer;
+			inset: 0;
+			inline-size: 100%;
+			block-size: 100%;
+			z-index: 1;
+			opacity: 0;
+			margin: 0;
+		}
+	}
+
+	&-fakecheck {
+		display: inline-flex;
+		min-inline-size: em(20);
+		inline-size: em(20);
+		block-size: em(20);
+		margin-block: auto;
+		margin-inline: 0 0.5em;
+		border-radius: var(--border-radius-small);
+
+		border: 1px solid var(--field-norm);
+		background-color: var(--field-background-color);
+		color: var(--field-text-color);
+
+		transition: 0.15s easing(easeOutCubic);
+
+		&:hover {
+			border-color: var(--field-hover);
+			background-color: var(--field-hover-background-color);
+			color: var(--field-hover-text-color);
+		}
+
+		&-img {
+			margin: auto;
+			transform: scale(0);
+			transition: 0.15s transform easing(easeOutBack);
+		}
+	}
+
+	&-input:focus + &-fakecheck {
+		border-color: var(--interaction-norm);
+		background-color: var(--field-focus-background-color);
+		color: var(--field-focus-text-color);
+	}
+
+	&-input[aria-invalid='true'] + &-fakecheck {
+		border-color: var(--signal-danger);
+		background-color: var(--field-background-color);
+		color: var(--signal-danger);
+	}
+
+	&-input[disabled] + &-fakecheck,
+	&-input:indeterminate + &-fakecheck {
+		border-color: var(--field-disabled);
+		background-color: var(--field-disabled-background-color);
+		color: var(--field-disabled-text-color);
+	}
+
+	/*
+	 * Checked state
+	 */
+	&-input:checked + &-fakecheck {
+		border-color: var(--interaction-norm);
+		background-color: var(--interaction-norm);
+		color: var(--interaction-norm-contrast);
+
+		&:hover {
+			border-color: var(--interaction-norm-hover);
+			background-color: var(--interaction-norm-hover);
+			color: var(--interaction-norm-contrast);
+		}
+	}
+
+	&-input:checked:focus + &-fakecheck {
+		border-color: var(--interaction-norm-hover);
+		background-color: var(--interaction-norm-hover);
+		color: var(--interaction-norm-contrast);
+	}
+
+	&-input:checked[aria-invalid='true'] + &-fakecheck {
+		border-color: var(--signal-danger);
+		background-color: var(--signal-danger);
+		color: var(--signal-danger-contrast);
+	}
+
+	&-input:checked[disabled] + &-fakecheck,
+	&-input:checked:indeterminate + &-fakecheck {
+		border-color: var(--field-disabled);
+		background-color: var(--field-disabled);
+		color: var(--interaction-norm-contrast);
+	}
+
+	&-input:checked + &-fakecheck &-fakecheck-img {
+		transform: scale(1);
+		transition-delay: 0.1s;
+	}
+}

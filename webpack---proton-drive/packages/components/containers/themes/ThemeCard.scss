@@ -1,0 +1,9 @@
+
+$path-images: "~@proton/styles/assets/img/shared/";
+
+
+@import '~@proton/styles/scss/config';
+
+.theme-card-image {
+	inline-size: rem(122);
+}

@@ -1,0 +1,44 @@
+.folder-tree {
+	@extend .bordered;
+	@extend .scroll-if-needed;
+
+	border-radius: var(--border-radius-medium);
+	block-size: 28em;
+
+	&-table {
+		inline-size: auto;
+		min-inline-size: 100%;
+		max-inline-size: initial;
+	}
+
+	&-list-item {
+		td {
+			padding-block: 0;
+		}
+
+		&-expand {
+			padding: 0.85em;
+
+			&-button {
+				@extend .button;
+				@extend .button-for-icon;
+
+				display: flex;
+				padding: 0;
+			}
+		}
+	}
+
+	&-list-item-name {
+		min-inline-size: 10em;
+	}
+
+	&-list-item-selected {
+		justify-content: center;
+		min-inline-size: 3em;
+
+		&-check {
+			padding: 0.15em;
+		}
+	}
+}

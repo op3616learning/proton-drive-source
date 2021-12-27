@@ -1,0 +1,28 @@
+
+$path-images: "~@proton/styles/assets/img/shared/";
+
+
+@import '~@proton/styles/scss/config';
+
+.contacts-widget {
+	--min-width: #{em(500)};
+	--min-height: #{em(550)};
+
+	&-search-container,
+	&-toolbar,
+	.item-container {
+		padding-inline: em(24);
+	}
+	&-tabs {
+		padding-block-start: em(12);
+		margin-inline: em(24);
+	}
+	.ReactVirtualized__Grid__innerScrollContainer {
+		border: 0;
+	}
+	@include respond-to($breakpoint-small) {
+		&.dropdown {
+			padding-inline: 5%;
+		}
+	}
+}

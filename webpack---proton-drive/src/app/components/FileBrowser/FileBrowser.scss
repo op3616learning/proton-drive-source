@@ -1,0 +1,85 @@
+@import '~@proton/styles/scss/config';
+
+.file-browser-list-item td,
+.file-browser-table th {
+	&:first-of-type {
+		// Checkbox cell
+		position: relative; // Because of .increase-click-surface
+		padding-inline: 1em;
+		inline-size: calc(#{rem(16)} + 2em);
+	}
+}
+
+.file-browser-grid-item {
+	position: relative;
+	background-color: var(--background-norm);
+
+	&:hover,
+	&:focus {
+		background-color: var(--background-weak);
+	}
+}
+
+.file-browser-grid-item.file-browser-grid-item--highlight {
+	background-color: var(--background-strong);
+}
+
+.file-browser-grid-item--thumbnail {
+	max-inline-size: 100%;
+	max-block-size: 100%;
+	object-fit: contain; // To keep original proportion in Safari.
+}
+
+.file-browser-grid-item--share-icon {
+	padding: 0.25em;
+	position: absolute;
+	inset-block-end: 0.25em;
+	inset-inline-end: 0.25em;
+	background-color: var(--background-norm);
+	border-radius: 50%;
+}
+
+.file-browser-grid-item--container {
+	position: relative;
+}
+
+.file-browser-grid-item--select {
+	position: absolute;
+	inset-block-start: 0.2em;
+	inset-inline-start: 0.2em;
+}
+
+.file-browser-grid-item--select-hover-only {
+	display: none;
+}
+
+.file-browser-grid-view--options {
+	display: none;
+	position: absolute;
+	inset-inline-end: 0.25em;
+	inset-block-end: 0.35em;
+}
+
+.file-browser-list--share-column {
+	inline-size: 50px; // To fit one small icon + spacing around.
+	max-block-size: 100%;
+}
+
+.file-browser-list-item--thumbnail {
+	block-size: 1rem;
+	inline-size: 1rem;
+	border-radius: 25%;
+	object-fit: cover;
+}
+
+// To replace when new hover helper is merged
+@media (hover: hover) and (pointer: fine) {
+	.file-browser-grid-item:hover {
+		.file-browser-grid-item--select-hover-only {
+			display: flex;
+		}
+		.file-browser-grid-view--options {
+			display: block;
+		}
+	}
+}

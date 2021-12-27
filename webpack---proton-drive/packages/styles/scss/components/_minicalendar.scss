@@ -1,0 +1,171 @@
+.minicalendar {
+	// Size of each cell width and height when `fixedSize`property is set.
+	--fixed-cell-size: #{em(34)};
+
+	min-inline-size: rem(150);
+	max-inline-size: rem(400);
+	font-size: rem(12);
+
+	&-grid,
+	&-weeknumbers,
+	&-weekdays,
+	&-monthdays {
+		display: grid;
+	}
+
+	&-weeknumbers,
+	&-weekdays,
+	&-monthdays {
+		grid-gap: 1px 0px;
+		user-select: none;
+
+		& > * {
+			display: flex;
+			justify-content: center;
+			align-items: stretch;
+			inline-size: var(--cell-width, auto);
+
+			// Chrome since v94 has a jiggling bug provoked by a cascade of minicalendar re-sizings at
+			// the threshold for the scrollbar to appear in the sidebar.
+			// We use a rather edgy browser check to avoid using aspect-ratio in Chrome because of this bug
+			@supports (aspect-ratio: 1 / 1) and (-moz-appearance: none) {
+				aspect-ratio: 1 / 1;
+			}
+
+			@supports (not (aspect-ratio: 1 / 1)) or (not (-moz-appearance: none)) {
+				block-size: var(--cell-height, initial);
+			}
+		}
+	}
+
+	&-grid {
+		grid-gap: 1px;
+
+		&:not(.with-weeknumbers) {
+			grid-template-columns: 7fr; // It could be 1fr, but well… just for you to understand ^^
+			grid-template-rows: auto;
+			grid-template-areas:
+				'weekdays'
+				'monthdays';
+		}
+
+		&.with-weeknumbers {
+			grid-template-columns: 1fr 1px 7fr;
+			grid-template-rows: auto;
+			grid-template-areas:
+				'weeknumbers rule weekdays'
+				'weeknumbers rule monthdays';
+		}
+
+		&.is-fixed-size {
+			--cell-width: var(--fixed-cell-size);
+		}
+
+		// Chrome since v94 has a jiggling bug provoked by a cascade of minicalendar re-sizings at
+		// the threshold for the scrollbar to appear in the sidebar.
+		// We use a rather edgy browser check to avoid using aspect-ratio in Chrome because of this bug
+		@supports (not (aspect-ratio: 1 / 1)) or (not (-moz-appearance: none)) {
+			// Ensure the aspect ratio while waiting for aspect-ratio property
+			--cell-height: var(--computed-cell-width, var(--fixed-cell-size));
+		}
+	}
+
+	&-weeknumbers {
+		grid-area: weeknumbers;
+		grid-template-columns: 1fr;
+		grid-template-rows: repeat(var(--week-count, 4), 1fr);
+	}
+
+	// Use a vertical rule instead of a border the use the grid gaps for spacing
+	&-vr {
+		grid-area: rule;
+	}
+
+	&-weekdays {
+		grid-area: weekdays;
+		grid-template-columns: repeat(var(--weekdays-count, 7), 1fr);
+		grid-template-rows: auto;
+		color: var(--text-weak);
+
+		& > * {
+			// No buttons for weekdays, so no need to stretch
+			align-items: center;
+		}
+	}
+
+	&-monthdays {
+		grid-area: monthdays;
+		grid-template-columns: repeat(var(--cols, 7), 1fr);
+		grid-template-rows: repeat(var(--rows, 4), 1fr);
+	}
+
+	&-weeknumber,
+	&-day {
+		@extend .interactive;
+
+		inline-size: 100%;
+		border-radius: var(--border-radius-medium);
+
+		&[aria-pressed='true'] {
+			background: var(--interaction-weak);
+			color: var(--text-norm);
+		}
+	}
+
+	&-day {
+		position: relative;
+
+		// This is the 'selected' marker, placed below the number by z-index
+		&::before {
+			content: '';
+			position: absolute;
+			inset: 0;
+			z-index: 0;
+			background: var(--primary);
+			border-radius: var(--border-radius-medium);
+			opacity: 0;
+			pointer-events: none;
+			transition: opacity 0.15s easing(easeOutQuad);
+		}
+
+		&-number {
+			position: relative;
+			z-index: 1;
+		}
+
+		&--selected::before {
+			opacity: 1;
+		}
+
+		&--selected &-number {
+			font-weight: bold;
+			color: var(--primary-contrast);
+		}
+
+		&[aria-current='date'] {
+			font-weight: bold;
+			color: var(--primary);
+		}
+
+		&--out-of-month {
+			color: var(--text-weak);
+
+			/* Seperate style of days out of month from the other ones when part of a range
+			&[aria-pressed='true'] {
+				background: var(--background-weak);
+				color: var(--text-weak);
+			}
+			*/
+		}
+
+		&--range:not(#{&}--range-bound-start) {
+			border-start-start-radius: 0;
+			border-end-start-radius: 0;
+		}
+
+		&--range:not(#{&}--range-bound-end) {
+			border-start-end-radius: 0;
+			border-end-end-radius: 0;
+		}
+	}
+}

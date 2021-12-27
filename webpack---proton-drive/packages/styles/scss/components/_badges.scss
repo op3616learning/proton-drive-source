@@ -1,0 +1,27 @@
+[class*='badge-label'] {
+	@extend .text-uppercase;
+	@extend .inline-flex;
+	font-size: rem(11); // to be sure this is the same height everywhere
+	padding-block: em(2, 11) em(3, 11);
+	padding-inline: em(8, 11);
+	line-height: 1;
+	border-radius: var(--border-radius-pill);
+}
+
+@each $color in (primary, danger, warning, success, info) {
+	$prefix: '';
+	@if $color != 'primary' {
+		$prefix: 'signal-';
+	}
+
+	.badge-label-#{$color} {
+		background-color: var(--#{$prefix + $color});
+		color: var(--#{$prefix + $color}-contrast);
+	}
+}
+
+@each $color in (norm, weak, strong) {
+	.badge-label-#{$color} {
+		background-color: var(--background-#{$color});
+	}
+}

@@ -1,0 +1,5 @@
+@each $cursor in (default, help, wait, grab, row-resize, col-resize, pointer, move) {
+	.cursor-#{$cursor} {
+		cursor: #{$cursor};
+	}
+}

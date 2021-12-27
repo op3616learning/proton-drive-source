@@ -1,0 +1,14 @@
+
+$path-images: "~@proton/styles/assets/img/shared/";
+
+
+@import '~@proton/styles/scss/config';
+
+.modal--human-verification {
+	&#{&} {
+		// Specificity -_-v
+		// Just tested this value, don't change it
+		inline-size: rem(730);
+		max-inline-size: rem(730);
+	}
+}

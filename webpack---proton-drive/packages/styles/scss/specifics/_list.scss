@@ -1,0 +1,439 @@
+@use "sass:math";
+/*
+ * Items
+ * For conversations and contacts lists
+ */
+
+$container-to-width: 3em !default;
+
+.items-column-list {
+	inline-size: var(
+		--width-conversation-column,
+		calc((100% + var(--width-sidebar, #{rem($width-sidebar)})) * #{math.div($conversations-column-width, 100%)})
+	);
+	transition: inline-size 100ms;
+}
+
+// trick to have proper direction on react virtual lists
+.ReactVirtualized__Grid,
+.ReactVirtualized__List {
+	direction: inherit !important;
+}
+
+.items-column-list-inner,
+.ReactVirtualized__Grid__innerScrollContainer {
+	border-inline-end: 1px solid var(--border-weak);
+	min-block-size: 100%;
+}
+
+.items-column-list-inner--no-border {
+	// fix for Contact and ReactVirtualized__Grid
+	border: 0;
+}
+
+.items-column-list--mobile {
+	inline-size: 100%;
+}
+
+.items-column-list,
+.items-column-list--mobile,
+.view-column-detail {
+	block-size: 100%;
+}
+
+.view-column-detail,
+// because it's sticky on top
+.message-conversation-summary {
+	background-color: var(--email-message-view-background-color);
+}
+
+$item-container-height: rem(64) !default;
+$item-container-padding-block: em(8.5) !default;
+$item-container-padding-inline: em(12) !default;
+
+$item-container-height-compact-mode: rem(48) !default;
+$item-container-row-height-compact-mode: rem(40) !default;
+
+.item-container,
+.item-container-row {
+	@extend %appearing-container;
+	position: relative;
+	padding-block: $item-container-padding-block; // design wants ~64 height
+	padding-inline: $item-container-padding-inline;
+	border-block-end: 1px solid var(--border-weak);
+	scroll-margin-block-start: $item-container-height;
+
+	// no transition, otherwhise there's a flash on page loading
+	// because of theme file loading after applying default theme colors
+
+	&::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		z-index: 1;
+		pointer-events: none;
+		transition: 0.15s easing(easeOutQuart);
+		border-inline-start: 5px solid transparent;
+	}
+
+	&:focus {
+		outline: none;
+	}
+
+	&.read {
+		background-color: var(--email-item-read-background-color);
+		color: var(--email-item-read-text-color);
+
+		.item-icon {
+			background-color: var(--email-item-read-icon-background-color);
+			color: var(--email-item-read-icon-text-color);
+		}
+	}
+
+	&.unread {
+		background-color: var(--email-item-unread-background-color);
+		color: var(--email-item-unread-text-color);
+
+		.item-senders,
+		.item-senddate-col,
+		.item-senddate-row,
+		.item-weight,
+		.item-subject {
+			font-weight: bold;
+		}
+
+		.item-icon {
+			background-color: var(--email-item-unread-icon-background-color);
+			color: var(--email-item-unread-icon-text-color);
+		}
+	}
+
+	&:hover::after {
+		box-shadow: var(--shadow-norm);
+	}
+
+	&:focus::after,
+	&.item-is-focused::after {
+		border-inline-start-color: var(--email-item-focus-marker-color);
+	}
+
+	&.item-is-selected,
+	// alias for Angular
+	&.item-container.active {
+		background-color: var(--email-item-selected-background-color);
+		color: var(--email-item-selected-text-color);
+
+		&:focus::after,
+		&.item-is-focused::after {
+			border-inline-start-color: var(--email-item-selected-focus-marker-color);
+		}
+
+		.item-icon {
+			background-color: var(--email-item-selected-icon-background-color);
+			color: var(--email-item-selected-icon-text-color);
+		}
+	}
+
+	// Styling for contact items inside contact dropdown
+	&.item-contact {
+		background-color: var(--email-item-unread-background-color);
+		color: var(--email-item-unread-text-color);
+
+		.item-icon {
+			background-color: var(--email-item-unread-icon-background-color);
+			color: var(--email-item-unread-icon-text-color);
+		}
+	}
+
+	// Encrypted search shows a preview of the body in the item,
+	// which therefore has to be bigger
+	&.es-three-rows {
+		height: rem(76);
+	}
+}
+
+.item-container {
+	block-size: $item-container-height;
+}
+
+.item-checkbox-label {
+	.item-checkbox {
+		// this is a crazy fix for Firefox - for having ::after stuff working on it for mail conversations
+		// to have increased area around checkbox for clicking
+		/* autoprefixer: ignore next */
+		/* stylelint-disable-next-line */
+		-moz-appearance: initial;
+	}
+
+	// fix for Firefox multi-selection issue
+	& > .item-checkbox {
+		inline-size: 100%;
+		block-size: 100%;
+		z-index: 1;
+	}
+}
+
+.item-firstline,
+.item-secondline {
+	block-size: em(20);
+	line-height: calc(20 * 1.5 / 21);
+}
+
+.item-secondline:empty {
+	min-block-size: 1.5em;
+}
+
+/* Compact view */
+.is-shown-when-compact {
+	display: none;
+}
+
+.item-senddate-col {
+	font-size: em(12);
+}
+
+.item-subject {
+	font-size: em(13);
+}
+
+.list-compact {
+	.item-container,
+	.item-container-row {
+		block-size: $item-container-height-compact-mode;
+		scroll-margin-block-start: $item-container-height-compact-mode;
+
+		.item-container-inner {
+			padding-block: em(0);
+			padding-inline: em(12);
+		}
+	}
+
+	.item-container-row {
+		block-size: $item-container-row-height-compact-mode;
+		scroll-margin-block-start: $item-container-row-height-compact-mode;
+		.item-icon-compact {
+			&::after {
+				block-size: $item-container-row-height-compact-mode;
+			}
+		}
+	}
+
+	.item-firstline,
+	.item-secondline {
+		margin: 0;
+	}
+
+	.is-hidden-when-compact {
+		display: none;
+	}
+
+	.is-shown-when-compact {
+		display: flex;
+	}
+}
+
+.item-is-loading {
+	background-color: var(--background-norm);
+	pointer-events: none;
+
+	.item-checkbox-label::before,
+	.item-icon-compact::before,
+	.item-senders::before,
+	.item-senddate-col::before,
+	.item-senddate-row::before,
+	.item-weight::before,
+	.item-star,
+	.item-subject::before {
+		@extend %placeholder-loading;
+	}
+
+	.item-checkbox-label,
+	.item-icon-compact {
+		position: relative;
+
+		&::before {
+			content: '';
+			position: absolute;
+			inset: 0;
+			z-index: 1;
+			border-radius: var(--border-radius-medium);
+			background-color: currentColor;
+			opacity: 0;
+		}
+
+		.item-icon,
+		.checkbox-fakecheck {
+			opacity: 0;
+		}
+	}
+
+	.item-senders,
+	.item-senddate-col,
+	.item-senddate-row,
+	.item-weight,
+	.item-subject {
+		&::before {
+			@extend %item-loading-pseudo;
+		}
+	}
+
+	.item-senders {
+		&::before {
+			inline-size: 35%;
+		}
+	}
+
+	.item-senddate-col {
+		min-inline-size: 6em;
+
+		&::before {
+			inline-size: 100%;
+		}
+	}
+
+	.item-senddate-row {
+		&::before {
+			inline-size: 70%;
+		}
+	}
+
+	.item-weight {
+		min-inline-size: 4em;
+
+		&::before {
+			inline-size: 100%;
+		}
+	}
+
+	.item-subject {
+		&::before {
+			inline-size: 60%;
+		}
+	}
+}
+
+.item-icon-compact {
+	inline-size: rem($conversation-icon-size);
+	block-size: rem($conversation-icon-size);
+	border-radius: 50%;
+	font-size: rem(12);
+	transition: background 0.25s ease;
+
+	&:hover {
+		background: var(--background-strong);
+	}
+
+	&::after {
+		content: '';
+		position: absolute;
+		inset-inline: -#{em(12)};
+		inset-block-start: calc(-1 * (#{$item-container-height-compact-mode} - #{rem($conversation-icon-size)}) / 2);
+		block-size: $item-container-height-compact-mode;
+	}
+
+	.checkbox-fakecheck {
+		margin: auto;
+		background: var(--background-norm);
+	}
+}
+
+.item-checkbox {
+	// for allowing hovering larger than fake circle
+	&::after {
+		content: '';
+		position: absolute;
+		inset-block: calc(-1 * ((#{$item-container-height} - #{rem($conversation-icon-size)}) / 2));
+		inset-inline-start: em(-12);
+		inline-size: calc(#{rem($conversation-icon-size)} + #{$item-container-padding-inline} + #{rem(5)});
+		// icon size + padding container + tiny margin for comfort
+	}
+
+	// hidden fake check by default
+	& + .item-icon > .item-icon-fakecheck {
+		display: none;
+	}
+
+	&:focus + .item-icon {
+		border-color: var(--interaction-norm);
+	}
+
+	// hover state of checkbox
+	&:hover + .item-icon,
+	& + .item-icon:hover {
+		& > .item-abbr {
+			display: none;
+		}
+
+		& > .item-icon-fakecheck {
+			display: flex;
+			transform: scale(1);
+		}
+	}
+
+	// checked state
+	&:checked + .item-icon {
+		background-color: var(--interaction-norm);
+
+		& > .item-abbr {
+			display: none;
+		}
+
+		& > .item-icon-fakecheck {
+			display: flex;
+			animation: anime-conversation-icon-in easing(easeOutQuint) 0.15s;
+		}
+
+		@keyframes anime-conversation-icon-in {
+			0% {
+				transform: scale(0);
+			}
+
+			100% {
+				transform: scale(1);
+			}
+		}
+
+		.item-icon-fakecheck-icon {
+			fill: var(--interaction-norm-contrast);
+		}
+	}
+}
+
+// fix pseudo element for row layout
+.item-container-row {
+	.item-checkbox {
+		&::after {
+			inset-block: -#{$item-container-padding-block};
+		}
+	}
+
+	.item-weight {
+		min-inline-size: 5em;
+	}
+}
+
+.item-sender--smaller,
+.item-date {
+	font-size: em(12);
+}
+
+.message-header-metas-container {
+	block-size: rem($conversation-icon-size);
+}
+
+.starbutton {
+	// no focus state, only focus-visible
+	&:focus-visible,
+	&:hover,
+	&--is-starred {
+		color: var(--favorite-icon-color);
+	}
+}
+
+.pill-icon {
+	display: inline-flex;
+	padding-block: 0.125em;
+	padding-inline: 0.5em;
+	border-radius: 1em;
+	line-height: 1;
+}

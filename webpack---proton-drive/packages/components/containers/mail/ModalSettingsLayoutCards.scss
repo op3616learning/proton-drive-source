@@ -1,0 +1,25 @@
+
+$path-images: "~@proton/styles/assets/img/shared/";
+
+
+@import '~@proton/styles/scss/config';
+
+.layoutCards-two-per-row {
+	&#{&} {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		grid-gap: 1em;
+
+		.layout-card-button {
+			margin: 0;
+			inline-size: 100%;
+		}
+		.layout-card-image {
+			inline-size: 100%;
+		}
+
+		@include respond-to($breakpoint-tiny) {
+			grid-template-columns: 1fr;
+		}
+	}
+}

@@ -1,0 +1,9 @@
+// Vr for vertical rule
+
+.vr {
+	display: inline-flex;
+	inline-size: 0;
+	block-size: auto;
+	flex: 0 0 0;
+	border-inline-end: 1px solid var(--border-norm);
+}

@@ -1,0 +1,164 @@
+.mod,
+.scroll-if-needed {
+	overflow: auto;
+}
+
+.scroll-horizontal-if-needed {
+	overflow-x: auto;
+}
+
+.mod--hidden,
+.no-scroll {
+	overflow: hidden;
+}
+
+.scroll-smooth-touch {
+	-webkit-overflow-scrolling: touch;
+}
+
+.float-left {
+	float: inline-start;
+}
+
+.float-right {
+	float: inline-end;
+}
+
+/* clear floats */
+.clear {
+	clear: both;
+}
+
+@if $use-clearleft_right==true {
+	.clear-left {
+		clear: inline-start;
+	}
+
+	.clear-right {
+		clear: inline-end;
+	}
+}
+
+@if $use-clearhidden==true {
+	.clear-hidden {
+		clear: both;
+		margin: 0;
+		padding: 0;
+		visibility: hidden;
+	}
+}
+
+@if $use-clearfix==true {
+	.clear-fix::after {
+		content: '.';
+		display: block;
+		block-size: 0;
+		clear: both;
+		visibility: hidden;
+	}
+}
+
+/* gut: "spacing" empty div */
+.gut {
+	block-size: 1px;
+}
+
+/* table-design in CSS */
+.row {
+	display: table;
+	table-layout: fixed;
+}
+
+.inline-row {
+	display: inline-table;
+	table-layout: fixed;
+}
+
+.line {
+	display: table-row;
+}
+
+.col {
+	display: table-cell;
+	vertical-align: top;
+}
+
+.col-no-align {
+	display: table-cell;
+}
+
+.block {
+	display: block;
+}
+
+.inline {
+	display: inline;
+}
+
+.inline-block {
+	display: inline-block;
+}
+
+/* grid = element of inline-grid */
+.grid {
+	@extend .inline-block;
+	@extend .align-top;
+}
+
+.inline-grid-container {
+	display: inline-grid;
+}
+
+/* centered block */
+.center {
+	margin-inline: auto;
+}
+
+.hidden,
+[hidden] {
+	display: none;
+}
+
+.list-2columns {
+	column-count: 2;
+	column-gap: 0;
+
+	& > *,
+	&-no-break {
+		/* stylelint-disable-next-line */
+		-webkit-column-break-inside: avoid;
+		/* Chrome, Safari, Opera */
+		page-break-inside: avoid;
+		/* Firefox */
+		break-inside: avoid;
+		/* IE 10+ */
+		break-inside: avoid-column;
+		/* W3C */
+	}
+}
+
+/*
+ * ratio container (for responsive iframes/videos/etc.)
+ */
+[class*='ratio-container-'] {
+	inline-size: 100%;
+	block-size: 0;
+	@extend .relative;
+}
+
+.ratio-container-square {
+	padding-block-start: 100%;
+}
+
+.ratio-container-16-9 {
+	padding-block-start: 56.25%;
+}
+
+.ratio-container-5-1 {
+	padding-block-start: 20%;
+}
+
+.inner-ratio-container {
+	position: absolute;
+	inset: 0;
+}

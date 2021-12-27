@@ -1,0 +1,138 @@
+.simple-table {
+	@extend .border-collapse;
+	@extend .no-border;
+	inline-size: 100%;
+
+	caption {
+		transform: scale(0);
+	}
+
+	td,
+	th {
+		padding: em(9);
+		border-block-end: 1px solid var(--border-norm);
+	}
+
+	th:not(#{&}-row-th) {
+		@extend .text-left;
+
+		&.text-center {
+			@extend .text-center;
+		}
+
+		&.text-right {
+			@extend .text-right;
+		}
+
+		@include respond-to($breakpoint-small) {
+			&.on-mobile-text-center {
+				@extend .on-mobile-text-center;
+			}
+		}
+	}
+
+	// no style for this case
+	&-row-th {
+		font-weight: normal;
+	}
+
+	/* alternate bg for rows */
+	&--alternate-bg-row tbody tr:nth-child(odd) {
+		background-color: var(--background-weak);
+	}
+
+	&--is-hoverable tbody tr {
+		@media (hover: hover) {
+			&:hover,
+			&:focus-within {
+				background-color: var(--interaction-default-hover);
+			}
+		}
+	}
+
+	tr#{&}-sticky-row {
+		td,
+		th {
+			position: sticky;
+			inset-block-start: 0;
+			background: var(--background-norm);
+			z-index: 1;
+
+			&::after {
+				content: '';
+				position: absolute;
+				inset-block-start: 100%;
+				inset-inline: 0;
+				z-index: -1;
+				block-size: rem(10);
+				background: linear-gradient(to bottom, rgb(0 0 0 / var(--shadow-norm-opacity)) 0%, transparent 100%);
+				pointer-events: none;
+				transition: opacity 0.125s ease-out;
+			}
+		}
+	}
+
+	tr#{&}-sticky-row#{&}-sticky-row--is-on-top {
+		td,
+		th {
+			&::after {
+				opacity: 0;
+			}
+		}
+	}
+
+	/* bordered-table */
+	&--bordered {
+		&,
+		th,
+		td {
+			border: 1px solid var(--border-norm);
+		}
+	}
+
+	&--has-actions {
+		&#{&} {
+			// Specificity -_-v
+			td,
+			th {
+				&:last-child {
+					text-align: end;
+				}
+			}
+		}
+	}
+
+	/* simple dirty fix */
+	a svg {
+		@extend .relative;
+		inset-block-start: -0.15em;
+	}
+}
+
+.alternate-table-bg-row-rounded {
+	@extend .no-border;
+	inline-size: 100%;
+	border-spacing: 0; // no border-collapse for radius ^^
+
+	td,
+	th {
+		padding: em(9);
+	}
+
+	/* alternate bg for rows */
+	tbody tr:nth-child(odd) {
+		// bg on all cells
+		> * {
+			background-color: var(--background-weak);
+		}
+		// radiuses
+		> :first-child {
+			border-start-start-radius: var(--border-radius-large);
+			border-end-start-radius: var(--border-radius-large);
+		}
+		> :last-child {
+			border-start-end-radius: var(--border-radius-large);
+			border-end-end-radius: var(--border-radius-large);
+		}
+	}
+}

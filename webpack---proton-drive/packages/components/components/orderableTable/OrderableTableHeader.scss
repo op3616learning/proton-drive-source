@@ -1,0 +1,11 @@
+
+$path-images: "~@proton/styles/assets/img/shared/";
+
+
+@import '~@proton/styles/scss/config';
+
+.orderableTableHeader {
+	th:first-child {
+		inline-size: rem(35);
+	}
+}

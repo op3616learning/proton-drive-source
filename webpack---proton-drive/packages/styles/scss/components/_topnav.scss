@@ -1,0 +1,139 @@
+$breakpoint-topnav-text-adaptation: 1200 !default; // used to display or not text in top navigation
+
+.topnav-link {
+	&--blackfriday::before {
+		content: '';
+		position: absolute;
+		inline-size: rem(7);
+		block-size: rem(7);
+		background: var(--signal-danger);
+		border-radius: 50%;
+		inset-inline-start: calc(#{rem(17.5)} + #{rem(15)});
+		inset-block-start: calc(50% - #{rem(14)});
+	}
+}
+
+.topnav-list > li:not(:last-child) {
+	margin-inline-end: 0.25em;
+
+	/* Decrease margins (was 1em) */
+	@include respond-to(1500) {
+		margin-inline-end: 1px;
+	}
+}
+
+.topnav-icon {
+	margin-inline-end: 0.5em;
+}
+
+.topnav-vr {
+	@include respond-to($breakpoint-large) {
+		display: none;
+	}
+}
+
+// code to collapse all elements except upgrade button (topnav-listItem--noCollapse)
+@mixin collapse-all-except-upgrade {
+	.topnav-list--four-elements {
+		.topnav-listItem:not(.topnav-listItem--noCollapse) {
+			// we collapse text as general case
+			.navigation-title {
+				// equivalent of .sr-only, but impossible to extend in a breakpoint
+				border: 0;
+				clip: rect(0 0 0 0);
+				block-size: 1px;
+				margin: -1px;
+				overflow: hidden;
+				padding: 0;
+				position: absolute;
+				inline-size: 1px;
+			}
+
+			.topnav-icon {
+				margin-inline-end: 0;
+
+				&.expand-caret {
+					margin-inline-start: 0.25em;
+				}
+			}
+		}
+	}
+}
+
+// code to collapse all elements with NO exception
+@mixin collapse-all-no-exception {
+	.topnav-list--four-elements {
+		.topnav-link {
+			padding-inline: rem(5);
+		}
+		.navigation-title {
+			// collapse for ALL without any exception
+			// equivalent of .sr-only, but impossible to extend in a breakpoint
+			border: 0;
+			clip: rect(0 0 0 0);
+			block-size: 1px;
+			margin: -1px;
+			overflow: hidden;
+			padding: 0;
+			position: absolute;
+			inline-size: 1px;
+		}
+		.topnav-icon {
+			margin-inline-end: 0;
+		}
+
+		.topnav-link--blackfriday::before {
+			inset-inline-start: calc(#{rem(5)} + #{rem(15)});
+		}
+	}
+}
+
+@include respond-to($breakpoint-topnav-text-adaptation) {
+	@include collapse-all-except-upgrade;
+}
+
+// special fix for Hungarian looooooooong text
+[lang='hu'] {
+	@include respond-to(1550) {
+		@include collapse-all-except-upgrade;
+	}
+	@include respond-to(1050) {
+		@include collapse-all-no-exception;
+	}
+}
+
+@include respond-to(870) {
+	@include collapse-all-no-exception;
+}
+
+@include respond-to($breakpoint-small) {
+	.topnav-icon {
+		// Specificity -_-v
+		&#{&} {
+			inline-size: rem(24);
+			block-size: rem(24);
+		}
+	}
+
+	.topnav-list--four-elements .topnav-link {
+		padding-inline: rem(10);
+	}
+
+	.topnav-list--four-elements .topnav-link--blackfriday::before,
+	.topnav-link--blackfriday::before {
+		inset-inline-start: calc(#{rem(10)} + #{rem(22)});
+		inset-block-start: calc(50% - #{rem(18)});
+	}
+}
+
+@include respond-to($breakpoint-tiny) {
+	.topnav-list--four-elements .topnav-link,
+	.topnav-link {
+		padding-inline: rem(2);
+	}
+
+	.topnav-list--four-elements .topnav-link--blackfriday::before,
+	.topnav-link--blackfriday::before {
+		inset-inline-start: calc(#{rem(5)} + #{rem(22)});
+	}
+}

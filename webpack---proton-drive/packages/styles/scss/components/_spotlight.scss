@@ -1,0 +1,150 @@
+@use "sass:math";
+
+.spotlight {
+	$arrow-width: 1em;
+
+	position: fixed;
+	z-index: 666;
+	min-inline-size: 10em;
+	max-inline-size: 20em;
+	transform: scale(1);
+	border-radius: var(--border-radius-large);
+	box-shadow: var(--shadow-lifted);
+	border: 1px solid var(--border-norm);
+	text-align: start;
+	word-break: break-word;
+	animation: 0.15s ease-out both anime-spotlight-in;
+
+	@keyframes anime-spotlight-in {
+		from {
+			transform: scale(0.75);
+			opacity: 0;
+		}
+		to {
+			transform: scale(1);
+			opacity: 1;
+		}
+	}
+
+	// Out animation
+	&.is-spotlight-out {
+		animation-name: anime-spotlight-out;
+
+		@keyframes anime-spotlight-out {
+			from {
+				transform: scale(1);
+				opacity: 1;
+			}
+			to {
+				transform: scale(0.75);
+				opacity: 0;
+			}
+		}
+	}
+
+	@include transform-origins;
+
+	&-inner {
+		position: relative;
+		z-index: 1;
+		padding-block: 1em;
+		padding-inline: 1.5em 3em;
+		border-radius: var(--border-radius-large);
+		background-color: var(--background-norm);
+	}
+
+	// Pseudo-elements to make arrows
+	&::before {
+		content: '';
+		position: absolute;
+		z-index: 0;
+		inline-size: $arrow-width;
+		block-size: $arrow-width;
+		transform: rotate(45deg);
+		border: inherit;
+		background-color: var(--background-norm);
+		pointer-events: none;
+		speak: none;
+	}
+
+	&--top,
+	&--top-left,
+	&--top-right {
+		&::before {
+			inset-block-end: -#{math.div($arrow-width, 2)};
+		}
+	}
+
+	&--bottom,
+	&--bottom-left,
+	&--bottom-right {
+		&::before {
+			inset-block-start: -#{math.div($arrow-width, 2)};
+		}
+	}
+
+	&--right,
+	&--right-top,
+	&--right-bottom {
+		&::before {
+			inset-inline-start: -#{math.div($arrow-width, 2)};
+		}
+	}
+
+	&--left,
+	&--left-top,
+	&--left-bottom {
+		&::before {
+			inset-inline-end: -#{math.div($arrow-width, 2)};
+		}
+	}
+
+	&--top,
+	&--bottom {
+		&::before {
+			inset-inline-start: calc(50% - #{math.div($arrow-width, 2)});
+		}
+	}
+
+	&--top-left,
+	&--bottom-left {
+		&::before {
+			inset-inline-start: max(calc(var(--arrow-offset, 0) - #{math.div($arrow-width, 2)}), 0px);
+		}
+	}
+
+	&--top-right,
+	&--bottom-right {
+		&::before {
+			inset-inline-end: max(calc(var(--arrow-offset, 0) - #{math.div($arrow-width, 2)}), 0px);
+		}
+	}
+
+	&--left,
+	&--right {
+		&::before {
+			inset-block-start: calc(50% - #{math.div($arrow-width, 2)});
+		}
+	}
+
+	&--left-top,
+	&--right-top {
+		&::before {
+			inset-block-start: max(calc(var(--arrow-offset, 0) - #{math.div($arrow-width, 2)}), 0px);
+		}
+	}
+
+	&--left-bottom,
+	&--right-bottom {
+		&::before {
+			inset-block-end: max(calc(var(--arrow-offset, 0) - #{math.div($arrow-width, 2)}), 0px);
+		}
+	}
+
+	&-close {
+		position: absolute;
+		inset-block-start: 0.5em;
+		inset-inline-end: 0.5em;
+		z-index: 1;
+	}
+}

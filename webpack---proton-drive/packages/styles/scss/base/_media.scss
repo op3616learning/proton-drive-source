@@ -1,0 +1,14 @@
+/**
+ * reduced motion MQ: for vestibular disorders
+ */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		// Using values greater than 0 to have animation events still triggering
+		animation-delay: 1ms !important;
+		animation-duration: 0.001ms !important;
+		transition-duration: 0.001ms !important;
+		animation-iteration-count: 1 !important;
+	}
+}

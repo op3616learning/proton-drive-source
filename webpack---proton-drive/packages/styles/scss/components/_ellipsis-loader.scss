@@ -1,0 +1,27 @@
+.ellipsis-loader {
+	display: inline-block;
+	inline-size: 1.4em;
+	vertical-align: baseline;
+	text-align: start;
+
+	&::before {
+		content: ' ';
+		font-family: monospace;
+		animation: anime-ellipsis-loading linear 1s infinite;
+	}
+}
+
+@keyframes anime-ellipsis-loading {
+	0% {
+		content: ' ';
+	}
+	25% {
+		content: '.';
+	}
+	50% {
+		content: '..';
+	}
+	75% {
+		content: '...';
+	}
+}

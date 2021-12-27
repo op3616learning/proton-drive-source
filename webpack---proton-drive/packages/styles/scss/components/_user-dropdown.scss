@@ -1,0 +1,47 @@
+.user-dropdown {
+	&-button {
+		@include respond-to(1500) {
+			margin-inline-start: 0.5em;
+		}
+
+		.user-initials {
+			background-color: var(--interaction-default);
+			transition: 0.15s easing(easeOutQuint), background-position 0s;
+		}
+
+		&:hover,
+		&:focus {
+			.user-initials {
+				background-color: var(--interaction-default-hover);
+			}
+		}
+
+		&:active,
+		&.is-active,
+		&[aria-expanded='true'] {
+			.user-initials {
+				background-color: var(--interaction-default-active);
+			}
+		}
+	}
+
+	&-text {
+		&#{&} {
+			// Specificity -_-v
+			max-inline-size: em(200);
+		}
+
+		@include respond-to($breakpoint-large) {
+			display: none;
+		}
+	}
+}
+
+// used on switch account, summary section and user dropdown
+.user-initials {
+	&#{&} {
+		// Specificity -_-v
+		min-inline-size: 2.5em;
+		min-block-size: 2.5em;
+	}
+}
